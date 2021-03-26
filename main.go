@@ -4,14 +4,20 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
 func main() {
 	http.HandleFunc("/", home)
 	http.HandleFunc("/healthcheck", healthcheck)
+
+	var port string
+	if port = os.Getenv("PORT"); port == "" {
+		port = "8080"
+	}
 	s := &http.Server{
-		Addr:           ":8080",
+		Addr:           fmt.Sprintf(":%s", port),
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
